@@ -1,31 +1,33 @@
+#----------------------------------------------------------
+# M1. Actividad
+# Este programa representa al modela de limpieza de habitacion
+# 
+# Date: 11-Nov-2022
+# Authors:
+#           Eduardo Joel Cortez Valente A01746664
+#           Paulo Ogando Gulias A01751587
+#----------------------------------------------------------
+
 from mesa import Model, DataCollector
 from mesa.time import SimultaneousActivation
 from mesa.space import MultiGrid
 
 from robot_limpieza import Robot, Basura
 
-
 class LimpiezaDeHabitacion(Model):
 
-    def __init__(self, TMax, N, width, height, porcentaje):
+    # Inicializa el modelo. Agrega los agentes
+    def __init__(self, tiempoMaximo, N, width, height, porcentaje):
         self.largo = width
         self.ancho = height
-        # Tiempo maximo de ejecucion
-        self.max_time = TMax - 2 # El -2 es para ajustar el detenimiento del programa
-        # Numero de robots
+        self.max_time = tiempoMaximo - 2 
         self.num_robots = N
-        # Cantidad de celdas con basura
         self.num_trash = round(width * height * porcentaje)
-        # Agregar una cuadricula donde nuestro modelo ha de correr
         self.grid = MultiGrid(width, height, True)
-        # Activates all the agents once per step, simultaneamente
         self.schedule = SimultaneousActivation(self)
-        # Enables conditional shut off of the model once a condition is met
         self.running = True
-        # Contador de tiempo (aumenta con los steps)
         self.cont_time = 0
 
-        # Create agentes
         for i in range(self.num_trash):
             if i <= self.num_robots:
                 robot = Robot(i, self)
@@ -37,7 +39,8 @@ class LimpiezaDeHabitacion(Model):
             basura = Basura(i+self.num_trash, self)            
             self.schedule.add(basura)
             self.grid.place_agent(basura, (x, y))
-            
+
+    # Checa si se ha alcanzado el limite de tiempo establecido
     def check_steps(self):
         if self.cont_time == self.max_time:
             print("Tiempo limite alcanzado")
@@ -50,11 +53,13 @@ class LimpiezaDeHabitacion(Model):
         else:
             self.cont_time += 1
     
+    # Checa si toda la basura ha sido limpiada
     def check_cleaned(self):
         if self.num_trash == 0:
             print(f"Toda la basura ha sido limpiada en un tiempo de {self.cont_time}")
             self.running = False
 
+    # Representa un paso del modelo
     def step(self):
         self.check_steps()
         self.check_cleaned()

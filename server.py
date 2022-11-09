@@ -1,8 +1,18 @@
+#----------------------------------------------------------
+# M1. Actividad
+# Este programa grafica visualmente el modelo y los agentes
+# interacturando
+# 
+# Date: 11-Nov-2022
+# Authors:
+#           Eduardo Joel Cortez Valente A01746664
+#           Paulo Ogando Gulias A01751587
+#----------------------------------------------------------
 import mesa
 from model import LimpiezaDeHabitacion
 from robot_limpieza import *
 
-# Drawing of each agent
+# Funcion que dibuja a cada uno de los agentes
 def agent_portrayal(agent):
     portrayal = {"Shape": "circle",
                  "Filled": "true",
@@ -26,8 +36,7 @@ def agent_portrayal(agent):
 
     return portrayal
 
-# La cantidad de basura sera 10 veces la de los robots
-numero_robots = 10
+numeroRobots = 10
 porcentaje = .40
 ancho = 10
 alto = 10
@@ -39,6 +48,6 @@ grid = mesa.visualization.CanvasGrid(agent_portrayal, ancho, ancho, 500, 500)
 server = mesa.visualization.ModularServer(LimpiezaDeHabitacion,
                        [grid],
                        "LimpiezaDeHabitacion",
-                       {"N":numero_robots, "TMax":tiempoMaximo, "width":ancho, "height":alto, "porcentaje":porcentaje})
+                       {"N":numeroRobots, "tiempoMaximo":tiempoMaximo, "width":ancho, "height":alto, "porcentaje":porcentaje})
 server.port = 8521  # The default
 server.launch()
