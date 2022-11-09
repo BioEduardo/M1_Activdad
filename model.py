@@ -7,7 +7,7 @@ from robot_limpieza import Robot, Basura
 
 class LimpiezaDeHabitacion(Model):
 
-    def __init__(self, TMax, N, width, height):
+    def __init__(self, TMax, N, width, height, porcentaje):
         self.largo = width
         self.ancho = height
         # Tiempo maximo de ejecucion
@@ -15,7 +15,7 @@ class LimpiezaDeHabitacion(Model):
         # Numero de robots
         self.num_robots = N
         # Cantidad de celdas con basura
-        self.num_trash = N # * 10
+        self.num_trash = round(width * height * porcentaje)
         # Agregar una cuadricula donde nuestro modelo ha de correr
         self.grid = MultiGrid(width, height, True)
         # Activates all the agents once per step, simultaneamente
